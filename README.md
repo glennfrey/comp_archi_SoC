@@ -7,7 +7,7 @@ Computer Architechture SoC
 ![](comparch/comparchi_processcc.png)
 ![](comparch/comparchi_simplepy.png)
 ### Day2
-![](comparch/comparchi_two_level py.png)
+![](comparch/comparchi_two_level.py.png)
 ![](comparch/comparchi_two_leveldebug.png)
 ![](comparch/comparchi_two_leveldebugExec.png)
 ![](comparch/comparchi_two_leveldebugRAM.png)

@@ -84,7 +84,16 @@ class NewObject(SimObject):
     cxx_header = "learning_gem5/Day4/new_object.hh"
     cxx_class = "gem5::NewObject"
 ```
+SConscript file is for scon environment which is the building environment of gem5. Line 1 means you want to import everything. Line 3 is telling gem5 that the simulation object is NewObject.py. In line 4 it is telling gem5 that the source code is new_object.cc.
+```
+Import('*')
+
+SimObject('NewObject.py', sim_objects=['NewObject'])
+Source('new_object.cc')
+```
 ![](day4/day4sconscript.png)
+After adding the source file and config file in their respective location we need to build gem5 using the command bellow.
+``` python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8 ```
 ![](day4/day4succeed.png)
 
 ### Assignment 

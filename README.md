@@ -120,10 +120,35 @@ caches to the system for this assignment.
 Submit your codes in a zip folder, clearly mentioning the names of the directory where
 those files are located and the run directory.
 ```
+For the assignment I just edited the c plus plus source code as shown below. The file directory can be found in gem5/src/learning_gem5/Day4. I deleted the line for CheckX86 and added header files for MATRIX and RESULT. I also edit the print line command to 'Sim Object that performs inverse of a matrix is created.'. I then added gem5 print function which is DPRINTF to print the matrix and the inverse matrix whenever we call for debug options. for MATRIX and RESULT respectively. Below is the updated source code.
+```
+#include "learning_gem5/Day4/new_object.hh"
+
+#include <iostream>
+#include "base/trace.hh"
+#include "debug/MATRIX.hh"
+#include "debug/RESULT.hh"
+namespace gem5
+{
+
+NewObject::NewObject(const NewObjectParams &params) :
+    SimObject(params)
+{
+    std::cout << "SimObject that performs Inverse of a matrix created\n!" << std::endl;
+    DPRINTF(MATRIX, "MATRIX is :\n  1,  2,  3\n  0,  1,  4\n  5,  6,  0\n");
+    DPRINTF(RESULT, "RESULT is :\n-24, 18,  5\n 20,-15, -4\n -5,  4,  1\n");
+}
+
+} // namespace gem5
+```
 ![](assignment/gem5assignmentNewObject.png)
+In the SConscript located temp/gem5/arch/ I edited SConscript by adding ```Debugflag('MATRIX') and Debugflag('RESULT')```. The additional commands is also shown in below printscreen.
 ![](assignment/gem5assignmentSConscript.png)
+I then move to process.cc in temp/gem5/arch/X86 to edit the process.cc. Here I added the header ```include "debug/MATRIX.hh" and include "debug/RESULT.hh"``` as shown. I then added line for ```DPRINTFR(MATRIX, "We created a MATRIX process") and DPRINTFR(RESULT, "We created a RESULT process")``` as shown also. 
 ![](assignment/gem5assignmentprocess.png)
+Below is the updated printscreen of source code. 
 ![](assignment/gem5assignmentNewObjectupdated.png)
+I then move to temp/gem5/src/learning_gem5/Day4. I then run ```scons build/X86/gem5.opt``` then run ```python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8```.
 ![](assignment/gem5assignmentRebuild.png)
 ![](assignment/gem5assignmentCreatingObject.png)
 ![](assignment/gem5assignmentCreatingObjectdebugMATRIX.png)

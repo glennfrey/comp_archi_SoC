@@ -33,7 +33,18 @@ print('Exiting @ tick {} because {}'
       .format(m5.curTick(), exit_event.getCause()))
 ```
 ![](day4/day4day4py.png)
+
 ![](day4/day4new_object.png) 
+NewObject.py file is a wrapper. In line 2-3 its importing necesssary objects and simulation object from gem5. Because gem5 is based on simulation object. In the fifth line you are creating a class name NewObject and your telling gem5 that it is a type of simulation object. In line 6 the type is normally the name of the class in this case NewObject. Line 7 will tell gem5 the location of the header file of the c plus plus code. In line 8 it is telling gem5 that in the cpp code in the gem5 namespace you are creating a simulation object name NewObject.
+```
+from m5.params import *
+from m5.SimObject import SimObject
+
+class NewObject(SimObject):
+    type = 'NewObject'
+    cxx_header = "learning_gem5/Day4/new_object.hh"
+    cxx_class = "gem5::NewObject"
+```
 ![](day4/day4sconscript.png)
 ![](day4/day4succeed.png)
 

@@ -53,15 +53,270 @@ Dependencies
 
 To install gem5 we need to install the dependencies. Setup on Ubuntu 18.04 (gem5 >= v21.0) If compiling gem5 on Ubuntu 18.04, or related Linux distributions, you may install all these dependencies using APT: ```sudo apt install build-essential git m4 scons zlib1g zlib1g-dev libprotobuf-dev protobuf-compiler libprotoc-dev libgoogle perftools-dev python3-dev python libboost-all-dev pkg-config```. After installing we can now proceed to cloning gem5 by using command ```git clone https://gem5.googlesource.com/public/gem5```. I then move to gem5 folder ```cd gem5```.
 ![](comparch/comparchi_simplepy.png)
-In this stage we then build X86 using gem5 with the command ```python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8```. Then we can now run a simulation by invoking a the configuration file in our first day of lab we use simple.py configuration file. We run the code after moving to its directory in temp/gem5/configs/learning/part1 with the command ```../../../build/X86/gem5.opt simple.py```. As we can see the simulation is successful as shown above.
+In this stage we then build X86 using gem5 with the command ```python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8```. Then we can now run a simulation by invoking a the configuration file in our first day of lab we use simple.py configuration file. We run the code after moving to its directory in temp/gem5/configs/learning/part1 with the command ```../../../build/X86/gem5.opt simple.py```. As we can see the simulation is successful as shown above. Here is the code for simple.py.
+```
+import m5
 
+from m5.objects import *
+
+
+system = System()
+
+
+system.clk_domain = SrcClockDomain()
+system.clk_domain.clock = '1GHz'
+system.clk_domain.voltage_domain = VoltageDomain()
+
+
+system.mem_mode = 'timing'              
+system.mem_ranges = [AddrRange('512MB')] 
+
+system.cpu = TimingSimpleCPU()
+
+
+system.membus = SystemXBar()
+
+system.cpu.icache_port = system.membus.cpu_side_ports
+system.cpu.dcache_port = system.membus.cpu_side_ports
+
+
+system.cpu.createInterruptController()
+
+if m5.defines.buildEnv['TARGET_ISA'] == "x86":
+    system.cpu.interrupts[0].pio = system.membus.mem_side_ports
+    system.cpu.interrupts[0].int_requestor = system.membus.cpu_side_ports
+    system.cpu.interrupts[0].int_responder = system.membus.mem_side_ports
+
+system.mem_ctrl = MemCtrl()
+system.mem_ctrl.dram = DDR3_1600_8x8()
+system.mem_ctrl.dram.range = system.mem_ranges[0]
+system.mem_ctrl.port = system.membus.mem_side_ports
+
+
+system.system_port = system.membus.cpu_side_ports
+
+
+isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
+
+
+
+thispath = os.path.dirname(os.path.realpath(__file__))
+binary = os.path.join(thispath, '../../../',
+                      'tests/test-progs/hello/bin/', isa, 'linux/hello')
+
+system.workload = SEWorkload.init_compatible(binary)
+
+process = Process()
+
+process.cmd = [binary]
+
+system.cpu.workload = process
+system.cpu.createThreads()
+
+root = Root(full_system = False, system = system)
+
+m5.instantiate()
+
+print("Beginning simulation!")
+exit_event = m5.simulate()
+print('Exiting @ tick %i because %s' % (m5.curTick(), exit_event.getCause()))
+```
 ### Day2
 In this lab we are tasked to run two_level.py. I first moved to directory of the configuration file two_level.py in the temp/gem5/configs/learning_gem5/part1. I then invoke the command ```../../../build/X86/gem5.opt two_level.py```. As shown below the simulation is successful and we got 5812500 ticks.
 ![](comparch/comparchi_two_level.py.png)
+Code for two_leve.py
+```
+import m5
+
+from m5.objects import *
+
+m5.util.addToPath('../../')
+
+
+from caches import *
+
+from common import SimpleOpts
+
+isa = str(m5.defines.buildEnv['TARGET_ISA']).lower()
+
+
+
+thispath = os.path.dirname(os.path.realpath(__file__))
+default_binary = os.path.join(thispath, '../../../',
+    'tests/test-progs/hello/bin/', isa, 'linux/hello')
+
+SimpleOpts.add_option("binary", nargs='?', default=default_binary)
+
+
+args = SimpleOpts.parse_args()
+
+system = System()
+
+
+system.clk_domain = SrcClockDomain()
+system.clk_domain.clock = '1GHz'
+system.clk_domain.voltage_domain = VoltageDomain()
+
+
+system.mem_mode = 'atomic'
+system.mem_ranges = [AddrRange('512MB')] 
+
+system.cpu = AtomicSimpleCPU()
+
+
+system.cpu.icache = L1ICache(args)
+system.cpu.dcache = L1DCache(args)
+
+
+system.cpu.icache.connectCPU(system.cpu)
+system.cpu.dcache.connectCPU(system.cpu)
+
+
+system.l2bus = L2XBar()
+
+
+system.cpu.icache.connectBus(system.l2bus)
+system.cpu.dcache.connectBus(system.l2bus)
+
+
+system.l2cache = L2Cache(args)
+system.l2cache.connectCPUSideBus(system.l2bus)
+
+
+system.membus = SystemXBar()
+
+
+system.l2cache.connectMemSideBus(system.membus)
+
+system.cpu.createInterruptController()
+
+
+if m5.defines.buildEnv['TARGET_ISA'] == "x86":
+    system.cpu.interrupts[0].pio = system.membus.mem_side_ports
+    system.cpu.interrupts[0].int_requestor = system.membus.cpu_side_ports
+    system.cpu.interrupts[0].int_responder = system.membus.mem_side_ports
+
+
+system.system_port = system.membus.cpu_side_ports
+
+
+system.mem_ctrl = MemCtrl()
+system.mem_ctrl.dram = DDR3_1600_8x8()
+system.mem_ctrl.dram.range = system.mem_ranges[0]
+system.mem_ctrl.port = system.membus.mem_side_ports
+
+system.workload = SEWorkload.init_compatible(args.binary)
+
+
+process = Process()
+
+process.cmd = [args.binary]
+
+system.cpu.workload = process
+system.cpu.createThreads()
+
+
+root = Root(full_system = False, system = system)
+
+m5.instantiate()
+
+print("Beginning simulation!")
+exit_event = m5.simulate()
+print('Exiting @ tick %i because %s' % (m5.curTick(), exit_event.getCause()))
+```
 On the same folder where we run the simulation an m5out will be generated. In it there is an config.ini file which can be use as a tool to check whether the correct parameters are implemented by gem5.
 ![](comparch/comparchi_two_levelm5out.png)
 This is what's inside the config.ini file. This has all the parameters that you need to check in order to validate the correct configuration of the simulation.
 ![](comparch/comparchi_two_levelm5outini.png)
+Code for Caches.py
+```
+import m5
+from m5.objects import Cache
+
+
+m5.util.addToPath('../../')
+
+from common import SimpleOpts
+
+class L1Cache(Cache):
+    assoc = 2
+    tag_latency = 2
+    data_latency = 2
+    response_latency = 2
+    mshrs = 4
+    tgts_per_mshr = 20
+
+    def __init__(self, options=None):
+        super(L1Cache, self).__init__()
+        pass
+
+    def connectBus(self, bus):
+        """Connect this cache to a memory-side bus"""
+        self.mem_side = bus.cpu_side_ports
+
+    def connectCPU(self, cpu):
+        """Connect this cache's port to a CPU-side port
+           This must be defined in a subclass"""
+        raise NotImplementedError
+
+class L1ICache(L1Cache):
+    """Simple L1 instruction cache with default values"""
+
+    # Set the default size
+    size = '16kB'
+
+    SimpleOpts.add_option('--l1i_size',
+                          help="L1 instruction cache size. Default: %s" % size)
+
+    def __init__(self, opts=None):
+        super(L1ICache, self).__init__(opts)
+        if not opts or not opts.l1i_size:
+            return
+        self.size = opts.l1i_size
+
+    def connectCPU(self, cpu):
+        """Connect this cache's port to a CPU icache port"""
+        self.cpu_side = cpu.icache_port
+
+class L1DCache(L1Cache):
+
+    size = '64kB'
+    SimpleOpts.add_option('--l1d_size',
+                          help="L1 data cache size. Default: %s" % size)
+
+    def __init__(self, opts=None):
+        super(L1DCache, self).__init__(opts)
+        if not opts or not opts.l1d_size:
+            return
+        self.size = opts.l1d_size
+
+    def connectCPU(self, cpu):
+        """Connect this cache's port to a CPU dcache port"""
+        self.cpu_side = cpu.dcache_port
+
+class L2Cache(Cache):
+    size = '256kB'
+    assoc = 8
+    tag_latency = 20
+    data_latency = 20
+    response_latency = 20
+    mshrs = 20
+    tgts_per_mshr = 12
+
+    SimpleOpts.add_option('--l2_size', help="L2 cache size. Default: %s" % size)
+
+    def __init__(self, opts=None):
+        super(L2Cache, self).__init__()
+        if not opts or not opts.l2_size:
+            return
+        self.size = opts.l2_size
+
+    def connectCPUSideBus(self, bus):
+        self.cpu_side = bus.mem_side_ports
+
+    def connectMemSideBus(self, bus):
+        self.mem_side = bus.cpu_side_ports
+```
 Here I used debug flags for DRAM to check the corresponding activities of it per clock ticks.
 ![](comparch/comparchi_two_leveldebug.png)
 Same debug is used to check the corresponding activities of the processor per clock ticks as shown.

@@ -52,13 +52,18 @@ Dependencies
 
 To install gem5 we need to install the dependencies. Setup on Ubuntu 18.04 (gem5 >= v21.0) If compiling gem5 on Ubuntu 18.04, or related Linux distributions, you may install all these dependencies using APT: ```sudo apt install build-essential git m4 scons zlib1g zlib1g-dev libprotobuf-dev protobuf-compiler libprotoc-dev libgoogle perftools-dev python3-dev python libboost-all-dev pkg-config```. After installing we can now proceed to cloning gem5 by using command ```git clone https://gem5.googlesource.com/public/gem5```. I then move to gem5 folder ```cd gem5```.
 ![](comparch/comparchi_simplepy.png)
-In this stage we then build X86 using gem5 with the command ```python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8```. Then run the configuration file simple.py code after moving to its directory in temp/gem5/configs/learning/part1 with the command ```../../../build/X86/gem5.opt simple.py```. As we can see the simulation is successful as shown.
+In this stage we then build X86 using gem5 with the command ```python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8```. Then we can now run a simulation by invoking a the configuration file in our first day of lab we use simple.py configuration file. We run the code after moving to its directory in temp/gem5/configs/learning/part1 with the command ```../../../build/X86/gem5.opt simple.py```. As we can see the simulation is successful as shown above.
 
 ### Day2
+In this lab we are tasked to run two_level.py. I first moved to directory of the configuration file two_level.py in the temp/gem5/configs/learning_gem5/part1. I then invoke the command ```../../../build/X86/gem5.opt two_level.py```. As shown below the simulation is successful and we got 5812500 ticks.
 ![](comparch/comparchi_two_level.py.png)
+On the same folder where we run the simulation an m5out will be generated. In it there is an config.ini file which can be use as a tool to check whether the correct parameters are implemented by gem5.
 ![](comparch/comparchi_two_levelm5out.png)
+This is what's inside the config.ini file. This has all the parameters that you need to check in order to validate the correct configuration of the simulation.
 ![](comparch/comparchi_two_levelm5outini.png)
+Here I used debug flags for DRAM to check the corresponding activities of it per clock ticks.
 ![](comparch/comparchi_two_leveldebug.png)
+Same debug is used to check the corresponding activities of the processor per clock ticks as shown.
 ![](comparch/comparchi_two_leveldebugRAM.png)
 ![](comparch/comparchi_two_leveldebugExec.png)
 ![](comparch/comparchi_two_levelXconscript.png)

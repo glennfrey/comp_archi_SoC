@@ -150,7 +150,10 @@ Below is the updated printscreen of source code.
 ![](assignment/gem5assignmentNewObjectupdated.png)
 I then move to temp/gem5/src/learning_gem5/Day4. I then run ```scons build/X86/gem5.opt``` then run ```python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8```.
 ![](assignment/gem5assignmentRebuild.png)
+After rebuilding I then run the day4.py and got a success result as shown.
 ![](assignment/gem5assignmentCreatingObject.png)
+In below printscreen I run the command with debug option ```./build/X86/gem5.opt --debug-flags=MATRIX configs/tutorial/part2/day4.py```. The command display the element of the matrix as part of the assignment.
 ![](assignment/gem5assignmentCreatingObjectdebugMATRIX.png)
+In below printscreen I run the command with debug option ```./build/X86/gem5.opt --debug-flags=RESULT configs/tutorial/part2/day4.py```. The command display the resulting inverse matrix as part of the assignment.
 ![](assignment/gem5assignmentCreatingObjectdebugRESULT.png)
 

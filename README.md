@@ -64,12 +64,16 @@ This is what's inside the config.ini file. This has all the parameters that you 
 Here I used debug flags for DRAM to check the corresponding activities of it per clock ticks.
 ![](comparch/comparchi_two_leveldebug.png)
 Same debug is used to check the corresponding activities of the processor per clock ticks as shown.
-![](comparch/comparchi_two_leveldebugRAM.png)
 ![](comparch/comparchi_two_leveldebugExec.png)
+Here I try to navigate the file structure and then look for SConscript file.
 ![](comparch/comparchi_two_levelXconscript.png)
+Here I add debug code ```DebugFlag('CheckX86')``` in the SConscript file as shown below.
 ![](comparch/comparchi_two_levelXconscript2.png)
+I then go to X86 folder in the same directory of arch folder. As shown below I add a code ```#include "debug/XCheckX86.hh"```. I also inserted below X86Process the code ```DPRINTFR(CheckX86, "We created a X86 process");```. The DPRINTFR is a gem5 tool function for printing lines same as printf function in C.
 ![](comparch/comparchi_processcc.png)
+Here I build gem5 again as shown below.
 ![](comparch/comparchi_gem5optupdate.png)
+Here the building of gem5 is complete as scons: done building targets are shown below. After building gem5 we can now proceed to running the simulation of two_level.py again but this time with the debug CheckX86 process as shown below. The simulation is successful!
 ![](comparch/comparchi_gem5optcreatedprocess.png)
 
 ### Day4

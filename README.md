@@ -33,7 +33,46 @@ print('Exiting @ tick {} because {}'
       .format(m5.curTick(), exit_event.getCause()))
 ```
 ![](day4/day4day4py.png)
+The new_object.hh is a header file. Every header file in gem5 has line 1,2 and 18. Line 4 means include those parameters which the gem5 will build into this header file. Line 5 is saying this is the header file of the simulation object. Line 7 to 16 means NewObject class is encapsulated with namespace gem5. Line 10 means your class NewObject specified in your .py file is inheriting to SimObject. This also means NewObject is a part of SimObject. Line 13 is just declaring a constructor. NewObjectParams is an object in which we can use to access gem5 parameters.
+```
+#ifndef __LEARNING_GEM5_NEW_OBJECT_HH__
+#define __LEARNING_GEM5_NEW_OBJECT_HH__
 
+#include "params/NewObject.hh"
+#include "sim/sim_object.hh"
+
+namespace gem5
+{
+
+class NewObject : public SimObject
+{
+  public:
+    NewObject(const NewObjectParams &p);
+};
+
+} // namespace gem5
+
+#endif // __LEARNING_GEM5_NEW_OBJECT_HH__
+```
+The new_object.cc is your working file. The first line is the location and the name of its header file. line 3 is basic cpp library. Line 6 to 16 is a namespace gem5. Line 9 is a constructor in it is a param object that we will be using to access parameters in gem5. Line 10 means SimObject also access using params object. Line 12 is straight forward. Line 13 means in this directory I will access my debug flag which is CheckX86.
+```
+#include "learning_gem5/Day4/new_object.hh"
+
+#include <iostream>
+#include "base/trace.hh"
+#include "debug/CheckX86.hh"
+namespace gem5
+{
+
+NewObject::NewObject(const NewObjectParams &params) :
+    SimObject(params)
+{
+    std::cout << "Printing from the New Object we created\n!" << std::endl;
+    DPRINTF(CheckX86, "Check X86 from new Object\n");
+}
+
+} // namespace gem5
+```
 ![](day4/day4new_object.png) 
 NewObject.py file is a wrapper. In line 2-3 its importing necesssary objects and simulation object from gem5. Because gem5 is based on simulation object. In the fifth line you are creating a class name NewObject and your telling gem5 that it is a type of simulation object. In line 6 the type is normally the name of the class in this case NewObject. Line 7 will tell gem5 the location of the header file of the c plus plus code. In line 8 it is telling gem5 that in the cpp code in the gem5 namespace you are creating a simulation object name NewObject.
 ```

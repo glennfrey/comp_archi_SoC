@@ -93,7 +93,14 @@ Source('new_object.cc')
 ```
 ![](day4/day4sconscript.png)
 After adding the source file and config file in their respective location we need to build gem5 using the command bellow.
-``` python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8 ```
+``` 
+python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8
+```
+After building the gem5, we can run X86 and run the configs and source file on top of it using the command
+```
+./build/X86/gem5.opt configs/tutorial/part2/day4.py
+```
+As shown the NewObject is created and simulation begins. The number of ticks is also shown.
 ![](day4/day4succeed.png)
 
 ### Assignment 

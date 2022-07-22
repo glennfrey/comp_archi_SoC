@@ -1,8 +1,58 @@
 # comp_archi_SoC
 Computer Architechture SoC
 ### Day1
+What is a system simulator?
+
+* System simulators are tools which are used by computer architects to simulate their designs.
+* There are simulators for CPUs, RAM, SSDs, SoCs, NoCs, etc. which allow architects to validate their designs before going to the fabrication process.
+* We are going to use one such CPU simulator today called Gem5.
+
+Why do we need system simulators?
+
+* Fabrication is an expensive step so computer architects need to be sure that their designs are valid before they are sent to the fabrication facilities.
+* Simulators provide a safe environment to experiment with different system parameters.
+* Simulators allow architectects to get an estimate of system performance without the need to build physical machines.
+
+What is gem5?
+
+* The gem5 simulator is a modular platform for computer-system architecture research, encompassing system-level architecture as well as processor microarchitecture.
+* Is is the result of the merger of two simulators: M5 and GEMS.
+
+What all is supported by Gem5?
+
+* Different ISAs: x86, ARM, ALPHA, POWER, SPARC, MIPS
+* Different CPU Models: TimingSimple, AtomicSimple, InOrder, OutOfOrder
+* Different binaries for performance and debug modes
+* Full System and System Emulation simulation models
+* Custom memory models using Ruby
+
+Today’s goals
+
+* Installing gem5 on a Linux distribution
+* Building gem5
+* Creating a simple configuration to simulate
+* Examining simulation outputs
+* Examining a simple HiWorld SimObject
+
+References
+
+* http://learning.gem5.org/book/
+* https://www.gem5.org/documentation/
+
 ![](comparch/comparchi.png)
+Dependencies
+
+* git : gem5 uses git for version control.
+* gcc: gcc is used to compiled gem5. Version >=7 must be used. We support up to gcc Version 11.
+* Clang: Clang can also be used. At present, we support Clang 6 to Clang 11 (inclusive).
+* SCons : gem5 uses SCons as its build environment. SCons 3.0 or greater must be used.
+* Python 3.6+ : gem5 relies on Python development libraries. gem5 can be compiled and run in environments using Python 3.6+.
+* protobuf 2.1+ (Optional): The protobuf library is used for trace generation and playback.
+* Boost (Optional): The Boost library is a set of general purpose C++ libraries. It is a necessary dependency if you wish to use the SystemC implementation.
+
+To install gem5 we need to install the dependencies. Setup on Ubuntu 18.04 (gem5 >= v21.0) If compiling gem5 on Ubuntu 18.04, or related Linux distributions, you may install all these dependencies using APT: ```sudo apt install build-essential git m4 scons zlib1g zlib1g-dev libprotobuf-dev protobuf-compiler libprotoc-dev libgoogle perftools-dev python3-dev python libboost-all-dev pkg-config```. After installing we can now proceed to cloning gem5 by using command ```git clone https://gem5.googlesource.com/public/gem5```. I then move to gem5 folder ```cd gem5```.
 ![](comparch/comparchi_simplepy.png)
+In this stage we then build X86 using gem5 with the command ```python3.6 $(which scons) build/X86/gem5.opt PYTHON_CONFIG=/usr/bin/python3.6-config -j8```. Then run the configuration file simple.py code after moving to its directory in temp/gem5/configs/learning/part1 with the command ```../../../build/X86/gem5.opt simple.py```. As we can see the simulation is successful as shown.
 
 ### Day2
 ![](comparch/comparchi_two_level.py.png)

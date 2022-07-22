@@ -218,8 +218,9 @@ In below printscreen I run the command with debug option ```./build/X86/gem5.opt
 ![](assignment/gem5assignmentCreatingObjectdebugRESULT.png)
 
 Acknowledgement:
-Dr. Sujay Dev - Professor
-Sneha Agarwal - Teaching Assistant
-Gagandeep IITD - Teaching Assistant
-Deepank Grover - Teaching Assistant
-Keshav Goel - Teaching Assistant
+
+* Dr. Sujay Dev - Professor
+* Sneha Agarwal - Teaching Assistant
+* Gagandeep IITD - Teaching Assistant
+* Deepank Grover - Teaching Assistant
+* Keshav Goel - Teaching Assistant

@@ -104,6 +104,22 @@ As shown the NewObject is created and simulation begins. The number of ticks is 
 ![](day4/day4succeed.png)
 
 ### Assignment 
+```
+Assignment
+
+1. Create a SimObject that performs Inverse of a matrix. You can specify the matrix
+elements without taking any user input.
+2. Add two DEBUG flags whose functionalities are given below. Each DEBUG flag should
+also have a proper description/annotation that is displayed on running the simulation.
+a) DEBUG flag “MATRIX” will display the size and elements of the matrices.
+b) DEBUG flag “RESULT” will display the resultant matrix.
+3. Now that you have implemented your SimObject and added the required flags, create
+the configuration script to use your new SimObject. You do not have to add a CPU or
+caches to the system for this assignment.
+4. You should also create a ReadMe file that explains the codes/ scripts submitted.
+Submit your codes in a zip folder, clearly mentioning the names of the directory where
+those files are located and the run directory.
+```
 ![](assignment/gem5assignmentNewObject.png)
 ![](assignment/gem5assignmentSConscript.png)
 ![](assignment/gem5assignmentprocess.png)

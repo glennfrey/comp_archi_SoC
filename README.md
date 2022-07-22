@@ -1,5 +1,6 @@
 # comp_archi_SoC
-Computer Architechture SoC
+Computer Architechture and System on a Chip
+![](vlsirevisited.jpg)
 ### Day1
 What is a system simulator?
 
@@ -216,3 +217,9 @@ In below printscreen I run the command with debug option ```./build/X86/gem5.opt
 In below printscreen I run the command with debug option ```./build/X86/gem5.opt --debug-flags=RESULT configs/tutorial/part2/day4.py```. The command display the resulting inverse matrix as part of the assignment.
 ![](assignment/gem5assignmentCreatingObjectdebugRESULT.png)
 
+Acknowledgement:
+Dr. Sujay Dev - Professor
+Sneha Agarwal - Teaching Assistant
+Gagandeep IITD - Teaching Assistant
+Deepank Grover - Teaching Assistant
+Keshav Goel - Teaching Assistant
